@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <button class="btn btn-primary" id="get-users">Get Users</button>
+        </div>
+        <div class="col">
+          <button class="btn btn-success" id="start-builder">
+            Start Builder
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <table class="table">
+            <thead>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Address</th>
+            </thead>
+            <tbody id="data-results">
+              <!--row tr-->
+              <!-- col td-->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    const getUsersBtn = document.querySelector("#get-users");
+    const startBuilderBtn = document.querySelector("#start-builder");
+    getUsersBtn.onclick = function () {
+      const results = document.querySelector("#data-results");
+
+      results.innerHTML = "loading...";
+      fetch("api/getUsers")
+        .then((result) => {
+          return result.json();
+        })
+        .then((users) => {
+          console.log(users);
+
+          // get the data-results element
+
+          //clear contents
+          results.innerHTML = "";
+
+          // loop through each users
+          for (let user of users) {
+            let newRow = document.createElement("tr");
+            let firstNameDiv = document.createElement("td");
+            let lastNameDiv = document.createElement("td");
+            let addressDiv = document.createElement("td");
+
+            firstNameDiv.textContent = user.first_name;
+            lastNameDiv.textContent = user.last_name;
+
+            newRow.append(firstNameDiv);
+            newRow.append(lastNameDiv);
+            newRow.append(addressDiv);
+            results.append(newRow);
+          }
+        });
+    };
+
+    startBuilderBtn.onclick = function () {
+      fetch("api/startBuilder")
+        .then((result) => {
+          return result.json();
+        })
+        .then((data) => {
+          console.log(data);
+        });
+    };
+  </script>
+</html>
